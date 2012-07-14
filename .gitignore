@@ -1,0 +1,10 @@
+.DS_Store
+target/
+project/target/
+.classpath
+.project
+.cache
+.settings
+.history
+*~
+*.swp
