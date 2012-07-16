@@ -1,53 +1,69 @@
 package at.logic.xmppb
 
-import collection.JavaConversions._
 import actors.Actor
 import actors.Actor._
 import org.jivesoftware.smack.packet.Message
-import org.jivesoftware.smack.{XMPPConnection, ConnectionConfiguration, Chat, ChatManagerListener, MessageListener}
+import org.jivesoftware.smack.{ConnectionConfiguration, Chat, ChatManagerListener, MessageListener}
 
 
-class XMPPBot(username: String, password: String, server: String, commandHandlers: CommandHandler*) extends Actor with ChatManagerListener with MessageListener {
-  private def stringToServer(s:String) = s.toLowerCase() match {
+// Messages accepted by XMPPBot
+case class SendMessageToUser(user: String, message: String)
+case class Delegate(message: String, callback: String => Unit) 
+
+class XMPPBot(username: String, password: String, servername: String, commandHandlers: CommandHandler*) extends Actor with ChatManagerListener with MessageListener {
+  commandHandlers.foreach( _.start() )
+  
+  private val connection = new Connection(username, password, servername.toLowerCase() match {
     case "gtalk" => new ConnectionConfiguration("talk.google.com", 5222, "gmail.com")
     case _ => throw new Exception("Unknown server.")
+  })
+  
+  private val chatManager = new ChatManager(connection)
+  chatManager.addChatListener(this)
+  
+  println()
+  println("XMPPBot started")
+  println()
+  
+  def sendMessageToUser(user: String, message: String) = {
+    println("Sent Message")
+    println("  to user: " + user)
+    println("  with content: " + message)
+    println()
+    chatManager.getOrCreateChat(user, this).sendMessage(message)
   }
-  
-  val connectionManager = new XMPPManager(username, password, stringToServer(server))
-  //Setup Connection
-  
-
-  //Start Chat
-  connectionManager.setupChat(this)
-
-  commandHandlers.foreach( _.start() )
 
   def act = {
     loop {
       react {
-        case CommandHandlerResponse(Some(answer)) => reply(answer)
-        case CommandHandlerResponse(None) => 
+        case SendMessageToUser(user, message) => sendMessageToUser(user, message)
+        case Delegate(message, callback) => commandHandlers foreach { handler =>
+          handler ! HandleCommandWithCallback(message, callback)
+        }
+        case unknown => println("Received unknown internal message: " + unknown) // this case should never happen.
       }
     }
     
   }
 
+  //this ! SendMessageToUser("lebekate@gmail.com", "hi")
+  
   //Listen & Forward Messages
   override def chatCreated(chat:Chat, locally:Boolean) = { chat.addMessageListener(this) }
-  println("chat created")
   
   
   override def processMessage(chat:Chat, message:Message) = {
+    println("Received Message")
+    println("  from user: " + chat.getParticipant)
+    println("  with content: " + message.getBody())
+    println()
     val callback = (answer: Any) => {
       val msg = new Message(chat.getParticipant, Message.Type.chat)
       msg.setBody(answer.toString)
-      //connectionManager.connection.sendPacket(msg)
-      connectionManager.sendPacket(msg)
+      connection.sendPacket(msg)
     }
-    commandHandlers foreach {
-      println("delegating message");
-      _ ! HandleCommand(message.getBody, callback)
-    } 
+    this ! Delegate(message.getBody, callback)
+
   }
 }
 

@@ -8,15 +8,10 @@ scalaVersion := "2.9.1"
 
 scalacOptions ++= Seq("-unchecked", "-deprecation")
 
-
-//resolvers ++= Seq(
-//  "Akka Repo" at "http://repo.akka.io/releases"
-//)
-
 libraryDependencies ++= Seq(
   "jivesoftware" % "smack" % "3.1.0",
   "jivesoftware" % "smackx" % "3.1.0",
-//  "se.scalablesolutions.akka" % "akka-actor" % "2.0",
+//  "at.logic" %% "skeptik" % "0.1",
   "net.databinder" %% "dispatch-http" % "0.8.5",
   "org.scalatest" %% "scalatest" % "1.7.2",
   "org.specs2" %% "specs2" % "1.10",
