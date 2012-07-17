@@ -3,28 +3,17 @@ package at.logic.xmppb
 
 import actors.Actor
 import actors.Actor._
+import org.jivesoftware.smack.Chat
 
 // Messages accepted by CommandHandlers
-case class HandleCommandWithCallback(message: String, callback: String => Unit )
-//case class HandleCommand(message: String)
+case class HandleCommand(parameters: String, chat: Chat)
 
 abstract class CommandHandler extends Actor {
-  //!COMMAND EXTRA STUFF HERE
-  //Example: !google something I want to know about
-  val Command = """^!([^\s]+)\s*(.*)$""".r
   def command: String
   
-  def handle(parameters: String, callback: String => Unit): Unit
+  def handle(parameters: String): String
   
-  def act() {
-    loop {
-      react {
-        case HandleCommandWithCallback(Command(c, parameters), callback) => {
-//          val message = SendMessageToUser("lebekate@gmail.com", "hihihi")
-//          sender ! "working"
-          if (command == c) handle(parameters, callback)
-        }                
-      }
-    }
-  }  
+  def act() { loop { react {
+    case HandleCommand(parameters, chat) => chat.sendMessage(handle(parameters))               
+  }}}  
 }
