@@ -9,9 +9,11 @@ object Main{
     if (args.length == 3) {
       val username = args(0)
       val password = args(1)
-      val server = args(2)
+      val servername = args(2)
       
-      val bot = new XMPPBot(args(0), args(1), args(2), new Greet(), new Google(), new Umbrella())
+      val chatDB = new ChatDB(username, password, servername)
+      
+      val bot = new XMPPBot(chatDB, new Greet(), new Google(), new Umbrella())
       bot.start()
     }
     else {

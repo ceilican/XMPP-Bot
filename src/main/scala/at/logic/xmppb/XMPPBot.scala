@@ -6,22 +6,17 @@ import org.jivesoftware.smack.packet.Message
 import org.jivesoftware.smack.{ConnectionConfiguration, Chat, ChatManagerListener, MessageListener}
 
 
-// Messages accepted by XMPPBot
+// Internal messages accepted by XMPPBot
 @deprecated
 case class SendMessage(user: String, message: String)
 case class Delegate(command: String, parameters: String, chat: Chat) 
 case object Help
 
-class XMPPBot(username: String, password: String, servername: String, commandHandlers: CommandHandler*) extends Actor with ChatManagerListener with MessageListener {
+
+class XMPPBot(chatDB: ChatDB, commandHandlers: CommandHandler*) extends Actor with ChatManagerListener with MessageListener {
   commandHandlers.foreach( _.start() )
   
-  private val connection = new Connection(username, password, servername.toLowerCase() match {
-    case "gtalk" => new ConnectionConfiguration("talk.google.com", 5222, "gmail.com")
-    case _ => throw new Exception("Unknown server.")
-  })
-  
-  private val chatManager = new ChatManager(connection)
-  chatManager.addChatListener(this)
+  chatDB.addChatListener(this)
   
   println()
   println("XMPPBot started")
@@ -50,7 +45,7 @@ class XMPPBot(username: String, password: String, servername: String, commandHan
     println("  to user: " + user)
     println("  with content: " + message)
     println()
-    chatManager.getOrCreateChat(user, this).sendMessage(message)
+    chatDB.getOrCreateChat(user, this).sendMessage(message)
   }
   
   override def processMessage(chat: Chat, message: Message) = {
@@ -67,4 +62,3 @@ class XMPPBot(username: String, password: String, servername: String, commandHan
     }
   }
 }
-

@@ -1,6 +1,5 @@
 package at.logic.xmppb
 
-import org.jivesoftware.smack.packet.Message
 import org.jivesoftware.smack.{XMPPConnection, ConnectionConfiguration}
 
 

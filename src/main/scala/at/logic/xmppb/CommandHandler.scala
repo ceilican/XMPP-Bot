@@ -5,7 +5,7 @@ import actors.Actor
 import actors.Actor._
 import org.jivesoftware.smack.Chat
 
-// Messages accepted by CommandHandlers
+// Internal messages accepted by CommandHandlers
 case class HandleCommand(parameters: String, chat: Chat)
 
 abstract class CommandHandler extends Actor {
