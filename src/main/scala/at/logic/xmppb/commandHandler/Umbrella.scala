@@ -4,7 +4,7 @@ package commandHandler
 import dispatch.{url, Http}
 
 
-class Umbrella() extends CommandHandler {
+class Umbrella() extends CommandHandler with SimpleAct {
   val command = "umbrella"
   val help = " : tells whether it will rain in Vienna today."
   def handle(rest: String) = {

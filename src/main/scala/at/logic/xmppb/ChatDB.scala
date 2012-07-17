@@ -24,6 +24,6 @@ class ChatDB(username: String, password: String, servername: String) extends Cha
   // a dummy message listener is unfortunately needed,
   // because ChatManager.createChat requires a message listener to create a Chat
   private val dummyMessageListener = new MessageListener {
-    def processMessage(chat: Chat, message: Message) = {}
+    def processMessage(chat: Chat, message: Message) = { }
   }
 }

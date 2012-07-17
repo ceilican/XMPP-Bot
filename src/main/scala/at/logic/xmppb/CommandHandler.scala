@@ -11,7 +11,9 @@ case class HandleCommand(parameters: String, chat: Chat)
 abstract class CommandHandler extends Actor {
   def command: String
   def help: String
-  
+}
+
+trait SimpleAct extends CommandHandler {
   def handle(parameters: String): String
   
   def act() { loop { react {
@@ -19,14 +21,10 @@ abstract class CommandHandler extends Actor {
   }}}  
 }
 
-trait CanInitiateChat {
-  def chatDB: ChatDB
+trait ActWithCommander extends CommandHandler {
+  def handle(parameters: String, commander: String): String
   
-  def sendMessage(user: String, message: String) = {
-    println("Sent Message")
-    println("  to user: " + user)
-    println("  with content: " + message)
-    println()
-    chatDB.getOrCreateChat(user).sendMessage(message)
-  }
+  def act() { loop { react {
+    case HandleCommand(parameters, chat) => chat.sendMessage(handle(parameters, chat.getParticipant))               
+  }}}  
 }
