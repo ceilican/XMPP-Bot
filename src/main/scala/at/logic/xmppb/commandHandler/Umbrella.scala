@@ -4,9 +4,9 @@ package commandHandler
 import dispatch.{url, Http}
 
 
-// UmbrellaToday.com (Forecast for Vienna, Austria)
 class Umbrella() extends CommandHandler {
   val command = "umbrella"
+  val help = " : tells whether it will rain in Vienna today."
   def handle(rest: String) = {
     val ExtractorRegExp = """<h3>\s*<span>(YES|NO)</span>\s*</h3>""".r
     val source = Http(url("http://umbrellatoday.com/locations/1073763541/forecast") as_str)

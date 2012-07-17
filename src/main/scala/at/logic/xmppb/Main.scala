@@ -11,10 +11,10 @@ object Main{
       val password = args(1)
       val servername = args(2)
       
-      val chatDB = new ChatDB(username, password, servername)
-      
-      val bot = new XMPPBot(chatDB, new Greet(), new Google(), new Umbrella())
-      bot.start()
+      val chatDB = new ChatDB(username, password, servername) 
+      val bot = new XMPPBot(chatDB, new Greet(chatDB), new Google(), new Umbrella())
+      bot.start()     
+      chatDB.addChatListener(bot)     
     }
     else {
       help()
@@ -26,11 +26,13 @@ object Main{
     XMPPBot Usage Instructions
     ==========================
         
-      sbt run <username> <password> <server>    
+      sbt run <username> <password> <servername>    
       
         example:
           sbt run someuser@gmail.com gmail-password-for-someuser GTalk
       
+          Then connect to GTalk with anotheruser's account and send a message to someuser.
+          The bot, logged in as someuser, will reply.
     """       
     )
 
