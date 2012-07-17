@@ -11,10 +11,10 @@ object Main{
       val password = args(1)
       val servername = args(2)
       
-      val chatDB = new ChatDB(username, password, servername) 
-      val bot = new XMPPBot(chatDB, new Greet(chatDB), new Google(), new Umbrella())
+      val chatManager = new ChatManager(username, password, servername) 
+      val bot = new XMPPBot(chatManager, new Greet(chatManager), new Google(), new Umbrella())
       bot.start()     
-      chatDB.addChatListener(bot)     
+      chatManager.addChatListener(bot)     
     }
     else {
       help()

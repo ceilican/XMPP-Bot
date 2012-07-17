@@ -2,14 +2,13 @@ package at.logic.xmppb
 
 import actors.Actor
 import actors.Actor._
-import org.jivesoftware.smack.packet.Message
-import org.jivesoftware.smack.Chat
 
 
 // Internal messages accepted by XMPPBot
 case class Delegate(command: String, parameters: String, chat: Chat) 
 
-class XMPPBot(val chatDB: ChatDB, commandHandlers: CommandHandler*) extends Actor 
+
+class XMPPBot(val chatManager: ChatManager, commandHandlers: CommandHandler*) extends Actor 
 with ChatManagerListener with MessageListener
 with CanInitiateChat {
   
@@ -31,19 +30,14 @@ with CanInitiateChat {
     }  
   }
    
-  override def chatCreated(chat:Chat, locally:Boolean) = { chat.addMessageListener(this) }
+  def processCreatedChat(chat:Chat) = { chat.addMessageListener(this) }
   
-  def processMessage(chat: Chat, message: Message) = {
-    println("Received Message")
-    println("  from user: " + chat.getParticipant)
-    println("  with content: " + message.getBody())
-    println()
-    
+  def processReceivedMessage(chat: Chat, message: String) = {    
     //Example: !google something I want to know about
     val Command = """^!([^\s]+)\s*(.*)$""".r
-    message.getBody match {
+    message match {
       case Command(c, parameters) => this ! Delegate(c, parameters, chat)
-      case _ => help(chat.getParticipant)
+      case _ => help(chat.participant)
     }
   }
   

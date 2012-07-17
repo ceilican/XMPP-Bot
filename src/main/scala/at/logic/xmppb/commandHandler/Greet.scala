@@ -1,7 +1,7 @@
 package at.logic.xmppb
 package commandHandler
 
-class Greet(val chatDB: ChatDB) extends CommandHandler with ActWithCommander with  CanInitiateChat {
+class Greet(val chatManager: ChatManager) extends CommandHandler with ActWithCommander with  CanInitiateChat {
   val command = "greet"
   val help = "<user@gmail.com> : sends greetings to <user@gmail.com>."
   def handle(destination: String, commander: String) = {
