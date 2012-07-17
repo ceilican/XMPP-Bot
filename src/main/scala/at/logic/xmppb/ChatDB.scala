@@ -1,14 +1,12 @@
 package at.logic.xmppb
 
 import org.jivesoftware.smack.packet.Message
-import org.jivesoftware.smack.{ConnectionConfiguration, Chat, ChatManagerListener, MessageListener}
+//import org.jivesoftware.smack.{ConnectionConfiguration, Chat, ChatManagerListener, MessageListener}
+import org.jivesoftware.smack.{ConnectionConfiguration, Chat}
 import collection.mutable.{Map => MMap}
 
 class ChatDB(username: String, password: String, servername: String) extends ChatManagerListener {
-  private val connection = new Connection(username, password, servername.toLowerCase() match {
-    case "gtalk" => new ConnectionConfiguration("talk.google.com", 5222, "gmail.com")
-    case _ => throw new Exception("Unknown server.")
-  })
+  private val connection = new Connection(username, password, servername)
   
   private val activeChats = MMap[String, Chat]()
   private val chatManager = connection.getChatManager

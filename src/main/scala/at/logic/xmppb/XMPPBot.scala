@@ -3,7 +3,7 @@ package at.logic.xmppb
 import actors.Actor
 import actors.Actor._
 import org.jivesoftware.smack.packet.Message
-import org.jivesoftware.smack.{ConnectionConfiguration, Chat, ChatManagerListener, MessageListener}
+import org.jivesoftware.smack.Chat
 
 
 // Internal messages accepted by XMPPBot
