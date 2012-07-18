@@ -2,9 +2,9 @@ package at.logic.xmppb
 
 import at.logic.xmppb.commandHandler._
 
-object Main{
+object Main {
 
-  def main(args: Array[String]){
+  def main(args: Array[String]) {
 
     if (args.length == 3) {
       val username = args(0)
@@ -12,7 +12,7 @@ object Main{
       val servername = args(2)
       
       val chatManager = new ChatManager(username, password, servername) 
-      val bot = new XMPPBot(chatManager, new Greet(chatManager), new Google(), new Umbrella())
+      val bot = new XMPPBot(new Greet(chatManager), new Google(), new Umbrella())
       bot.start()     
       chatManager.addChatListener(bot)     
     }
