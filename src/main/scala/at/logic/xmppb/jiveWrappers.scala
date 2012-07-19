@@ -38,6 +38,7 @@ class Chat(c: JiveChat) {
 class Connection(username: String, password: String, servername: String) 
 extends XMPPConnection(servername.toLowerCase() match {
   case "gtalk" => new ConnectionConfiguration("talk.google.com", 5222, "gmail.com")
+  case "jabber" => new ConnectionConfiguration("jabber.org", 5222, "jabber.org")
   case _ => throw new Exception("Unknown server.")
 }) {
   connect()
