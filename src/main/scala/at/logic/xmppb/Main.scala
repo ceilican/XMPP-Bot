@@ -3,7 +3,7 @@ package at.logic.xmppb
 import at.logic.xmppb.commandHandler._
 
 object Main {
-
+  
   def main(args: Array[String]) {
 
     if (args.length == 3) {
