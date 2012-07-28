@@ -8,7 +8,7 @@ import actors.Actor._
 case class Delegate(command: String, parameters: String, chat: Chat) 
 
 
-class XMPPBot(commandHandlers: CommandHandler*) extends Actor 
+class XMPPBot(val chatManager: ChatManager, commandHandlers: CommandHandler*) extends Actor 
 with ChatManagerListener with MessageListener
 with CanInitiateChat {
   

@@ -16,7 +16,9 @@ libraryDependencies ++= Seq(
   "org.scalatest" %% "scalatest" % "1.7.2",
   "org.specs2" %% "specs2" % "1.10",
   "org.scalacheck" %% "scalacheck" % "1.9",
-  "junit" % "junit" % "4.10"
+  "junit" % "junit" % "4.10",
+  "org.scalaquery" %% "scalaquery" % "0.10.0-M1",
+  "mysql" % "mysql-connector-java" % "5.1.18"
 )
 
 licenses := Seq("GNU GPL v3" -> url("http://www.gnu.org/licenses/gpl.html"))
